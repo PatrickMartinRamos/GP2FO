@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "walk",
+                    "type": "Button",
+                    "id": "89cae619-842d-40c5-b776-1f08d3fdb951",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -121,6 +130,17 @@
                     "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "003c1db3-2654-4d68-984e-119a535c0847",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "walk",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -132,6 +152,15 @@
                     "name": "shoot",
                     "type": "Button",
                     "id": "1b927291-78a0-4cf6-9ed9-61eff3bb8cfa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "relaod",
+                    "type": "Button",
+                    "id": "0a796746-636c-493e-85b4-7bd6d6291c6e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -158,6 +187,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3130d6b5-e195-45b5-8f0f-84d08bd386cf",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "relaod",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

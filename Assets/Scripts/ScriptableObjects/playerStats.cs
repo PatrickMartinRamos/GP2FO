@@ -8,6 +8,8 @@ public class playerStats : ScriptableObject
 {
     public float health;
     public float walkSpeed;
+    public float sprintSpeed;
     public float runSpeed;
     public float attackDamage;
+    public int ammo;
 }

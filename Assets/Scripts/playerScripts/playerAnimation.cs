@@ -27,6 +27,11 @@ public class playerAnimation : MonoBehaviour
             horMove = 1.5f;
             verMove = 1.5f;
         }
+        if(playerController.walkAction)
+        {
+            horMove = .5f;
+            verMove = .5f;
+        }
 
         animator.SetFloat(horizontalParameter, horMove);
         animator.SetFloat(verticalParameter, verMove);
@@ -39,5 +44,10 @@ public class playerAnimation : MonoBehaviour
     public void stopShootAnimation()
     {
         animator.SetBool("shooting", false);
+    }
+    public void reloadAnimation()
+    {
+        //reload animation here
+        Debug.Log("is reloading");
     }
 }

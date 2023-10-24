@@ -6,15 +6,18 @@ using UnityEngine.InputSystem;
 
 public class playerController : MonoBehaviour
 {
+    #region
+
     [SerializeField] private Camera mainCamera;
     private Rigidbody rb;
     // Player Inputs
     private PlayerInputs playerInputs;
-    Vector2 walkAction;   // Stores the movement input from the player.
+    Vector2 runAction;   // Stores the movement input from the player.
     Vector2 aimAction;    // Stores the aim input from the player.
     public bool SprintAction = false;
     public bool shoot = false;
- 
+    public bool walkAction = false;
+
     // Player Stats
     public playerStats SoldierStats;
     playerCombat playerCombat;
@@ -33,6 +36,7 @@ public class playerController : MonoBehaviour
     
     //event handler
     public bool isGameStart;
+    #endregion 
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +47,17 @@ public class playerController : MonoBehaviour
         playerAnim = GetComponent<playerAnimation>();
     }
 
+    public void Update()
+    {
+        if(isGameStart)
+        {
+            handleAllInput();
+        }
+ 
+
+    }
+
+    #region Enable Input Manager 
     private void OnEnable()
     {
         if (playerInputs == null)
@@ -50,8 +65,12 @@ public class playerController : MonoBehaviour
             playerInputs = new PlayerInputs();
 
             // Subscribe to the player's movement input action.
-            playerInputs.playerMoveController.playerMovement.performed += i => walkAction = i.ReadValue<Vector2>();
+            playerInputs.playerMoveController.playerMovement.performed += i => runAction = i.ReadValue<Vector2>();
 
+            //Subscribe to the walk input action
+            playerInputs.playerMoveController.walk.performed += i => walkAction = true;
+            playerInputs.playerMoveController.walk.canceled += i => walkAction = false;
+         
             // Subscribe to the player's mouse aim input action.
             playerInputs.playerMoveController.mouseAim.performed += i => aimAction = i.ReadValue<Vector2>();
 
@@ -62,6 +81,9 @@ public class playerController : MonoBehaviour
             //Subscribe to the shooting Action.
             playerInputs.playerActionController.shoot.performed += i => shoot = true;
             playerInputs.playerActionController.shoot.canceled += i => shoot = false;
+
+            //Call the reload function
+            playerInputs.playerActionController.relaod.canceled += i => reloadAction();
         }
         playerInputs.Enable(); // Enable the player input actions.
     }
@@ -71,7 +93,7 @@ public class playerController : MonoBehaviour
         if (playerInputs != null)
         {
             // Unsubscribe from the player's movement input action.
-            playerInputs.playerMoveController.playerMovement.performed -= i => walkAction = i.ReadValue<Vector2>();
+            playerInputs.playerMoveController.playerMovement.performed -= i => runAction = i.ReadValue<Vector2>();
 
             // Subscribe to the player's mouse aim input action.
             playerInputs.playerMoveController.mouseAim.performed -= i => aimAction = i.ReadValue<Vector2>();
@@ -83,28 +105,29 @@ public class playerController : MonoBehaviour
             // Unsubscribe to the shooting Action.
             playerInputs.playerActionController.shoot.performed -= i => shoot = true;
             playerInputs.playerActionController.shoot.canceled -= i => shoot = false;
+
+            //Unsubscribe to the walk Action
+            playerInputs.playerMoveController.walk.performed -= i => walkAction = true;
+            playerInputs.playerMoveController.walk.performed -= i => walkAction = false;
+
         }
         playerInputs.Disable(); // Disable the player input actions.
     }
-
-    public void Update()
-    {
-        if(isGameStart)
-        {
-            handleAllInput();
-        }
-     
-    }
+    #endregion  
     //put here all input handler to one function
     public void handleAllInput()
     {
-        handleWalk();
+        handleRun();
         handleSprint();
         HandleAim();
         shootAction();
+        handWalk();
     }
+
+    #region Shoot Action
     public void shootAction()
     {
+        //shooting logic
         if(shoot)
         {
             playerCombat.startShootAction();
@@ -117,10 +140,20 @@ public class playerController : MonoBehaviour
             startShooting = false;
         }
     }
+    #endregion
 
-    public void handleWalk()
+    public void reloadAction()
     {
-        moveDirection = walkAction;
+        shoot = false;
+        startShooting = false;
+        playerCombat.stopShootAction();
+        playerAnim.reloadAnimation();
+    }
+
+    #region Handel Run
+    public void handleRun()
+    {
+        moveDirection = runAction;
         // Smoothly blend the current animation based on the movement direction.
         currentAnimationBlend = Vector2.SmoothDamp(currentAnimationBlend, moveDirection, ref animationVelocity, animationSmoothTime * Time.deltaTime);
 
@@ -128,14 +161,33 @@ public class playerController : MonoBehaviour
     
         // Update the player's animation values and move the player.
         playerAnim.updateAnimValue(currentAnimationBlend.x, currentAnimationBlend.y);
-        transform.position += movements * SoldierStats.walkSpeed * Time.deltaTime;
+        transform.position += movements * SoldierStats.runSpeed * Time.deltaTime;
     }
+    #endregion
+
+    #region Handle Walk
+    public void handWalk()
+    {
+        if (walkAction && movements != Vector3.zero)
+        {
+            transform.position -= movements * SoldierStats.walkSpeed * Time.deltaTime;
+   
+            Debug.Log("some");
+        }
+        else
+        {
+            walkAction = false;
+        
+        }
+    }
+    #endregion
+    #region HandeSprint
     public void handleSprint()
     {
        if (SprintAction && movements != Vector3.zero)
         {
             //add the run speed value to the current movement speed
-            transform.position += movements * SoldierStats.runSpeed * Time.deltaTime;
+            transform.position += movements * SoldierStats.sprintSpeed * Time.deltaTime;
             //Debug.Log("sprint");
         }
         else
@@ -143,6 +195,9 @@ public class playerController : MonoBehaviour
             SprintAction = false;
         }
     }
+    #endregion
+
+    #region Handle Aim
     void HandleAim()
     {
         aimDir = aimAction;
@@ -163,5 +218,6 @@ public class playerController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 50f * Time.deltaTime);
         }
     }
+    #endregion  
 
 }

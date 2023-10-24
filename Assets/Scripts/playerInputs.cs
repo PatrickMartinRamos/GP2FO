@@ -53,6 +53,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""walk"",
+                    ""type"": ""Button"",
+                    ""id"": ""89cae619-842d-40c5-b776-1f08d3fdb951"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -143,6 +152,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""003c1db3-2654-4d68-984e-119a535c0847"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -154,6 +174,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""name"": ""shoot"",
                     ""type"": ""Button"",
                     ""id"": ""1b927291-78a0-4cf6-9ed9-61eff3bb8cfa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""relaod"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a796746-636c-493e-85b4-7bd6d6291c6e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -182,6 +211,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3130d6b5-e195-45b5-8f0f-84d08bd386cf"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""relaod"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -193,9 +233,11 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_playerMoveController_playerMovement = m_playerMoveController.FindAction("playerMovement", throwIfNotFound: true);
         m_playerMoveController_mouseAim = m_playerMoveController.FindAction("mouseAim", throwIfNotFound: true);
         m_playerMoveController_Sprint = m_playerMoveController.FindAction("Sprint", throwIfNotFound: true);
+        m_playerMoveController_walk = m_playerMoveController.FindAction("walk", throwIfNotFound: true);
         // playerActionController
         m_playerActionController = asset.FindActionMap("playerActionController", throwIfNotFound: true);
         m_playerActionController_shoot = m_playerActionController.FindAction("shoot", throwIfNotFound: true);
+        m_playerActionController_relaod = m_playerActionController.FindAction("relaod", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -260,6 +302,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_playerMoveController_playerMovement;
     private readonly InputAction m_playerMoveController_mouseAim;
     private readonly InputAction m_playerMoveController_Sprint;
+    private readonly InputAction m_playerMoveController_walk;
     public struct PlayerMoveControllerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -267,6 +310,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @playerMovement => m_Wrapper.m_playerMoveController_playerMovement;
         public InputAction @mouseAim => m_Wrapper.m_playerMoveController_mouseAim;
         public InputAction @Sprint => m_Wrapper.m_playerMoveController_Sprint;
+        public InputAction @walk => m_Wrapper.m_playerMoveController_walk;
         public InputActionMap Get() { return m_Wrapper.m_playerMoveController; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -285,6 +329,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @walk.started += instance.OnWalk;
+            @walk.performed += instance.OnWalk;
+            @walk.canceled += instance.OnWalk;
         }
 
         private void UnregisterCallbacks(IPlayerMoveControllerActions instance)
@@ -298,6 +345,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @walk.started -= instance.OnWalk;
+            @walk.performed -= instance.OnWalk;
+            @walk.canceled -= instance.OnWalk;
         }
 
         public void RemoveCallbacks(IPlayerMoveControllerActions instance)
@@ -320,11 +370,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_playerActionController;
     private List<IPlayerActionControllerActions> m_PlayerActionControllerActionsCallbackInterfaces = new List<IPlayerActionControllerActions>();
     private readonly InputAction m_playerActionController_shoot;
+    private readonly InputAction m_playerActionController_relaod;
     public struct PlayerActionControllerActions
     {
         private @PlayerInputs m_Wrapper;
         public PlayerActionControllerActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @shoot => m_Wrapper.m_playerActionController_shoot;
+        public InputAction @relaod => m_Wrapper.m_playerActionController_relaod;
         public InputActionMap Get() { return m_Wrapper.m_playerActionController; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -337,6 +389,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @shoot.started += instance.OnShoot;
             @shoot.performed += instance.OnShoot;
             @shoot.canceled += instance.OnShoot;
+            @relaod.started += instance.OnRelaod;
+            @relaod.performed += instance.OnRelaod;
+            @relaod.canceled += instance.OnRelaod;
         }
 
         private void UnregisterCallbacks(IPlayerActionControllerActions instance)
@@ -344,6 +399,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @shoot.started -= instance.OnShoot;
             @shoot.performed -= instance.OnShoot;
             @shoot.canceled -= instance.OnShoot;
+            @relaod.started -= instance.OnRelaod;
+            @relaod.performed -= instance.OnRelaod;
+            @relaod.canceled -= instance.OnRelaod;
         }
 
         public void RemoveCallbacks(IPlayerActionControllerActions instance)
@@ -366,9 +424,11 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnPlayerMovement(InputAction.CallbackContext context);
         void OnMouseAim(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnWalk(InputAction.CallbackContext context);
     }
     public interface IPlayerActionControllerActions
     {
         void OnShoot(InputAction.CallbackContext context);
+        void OnRelaod(InputAction.CallbackContext context);
     }
 }

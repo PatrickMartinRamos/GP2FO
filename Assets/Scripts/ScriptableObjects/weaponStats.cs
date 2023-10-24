@@ -10,4 +10,5 @@ public class weaponStats : ScriptableObject
     public float fireRate;
     public GameObject bulletPrefab;
     public float reloadTime;
+    public int magazineSize;
 }

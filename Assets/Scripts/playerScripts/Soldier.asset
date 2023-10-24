@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   walkSpeed: 5
-  runSpeed: 2
+  sprintSpeed: 3
+  runSpeed: 7
   attackDamage: 0
+  ammo: 150

@@ -6,16 +6,26 @@ public class playerManager : MonoBehaviour
 {
     public playerStats playerStats;
 
-    private float playerHealth;
-
     public void Start()
-    {
-        playerStats.health = playerHealth;
-    }
-
-    public void Update()
     {
         
     }
 
+    public void Update()
+    {
+        handleHealth();
+        //Debug.Log(playerStats.health);
+    }
+
+    public void handleHealth()
+    {
+        if (playerStats.health <= 0)
+        {
+            //death animation
+            //game overscreen
+            Destroy(gameObject);
+            //Debug.Log("die");
+        }
+    }
 }
+

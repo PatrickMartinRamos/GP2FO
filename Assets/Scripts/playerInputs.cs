@@ -180,7 +180,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""relaod"",
+                    ""name"": ""reload"",
                     ""type"": ""Button"",
                     ""id"": ""0a796746-636c-493e-85b4-7bd6d6291c6e"",
                     ""expectedControlType"": ""Button"",
@@ -219,7 +219,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""relaod"",
+                    ""action"": ""reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -237,7 +237,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // playerActionController
         m_playerActionController = asset.FindActionMap("playerActionController", throwIfNotFound: true);
         m_playerActionController_shoot = m_playerActionController.FindAction("shoot", throwIfNotFound: true);
-        m_playerActionController_relaod = m_playerActionController.FindAction("relaod", throwIfNotFound: true);
+        m_playerActionController_reload = m_playerActionController.FindAction("reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -370,13 +370,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_playerActionController;
     private List<IPlayerActionControllerActions> m_PlayerActionControllerActionsCallbackInterfaces = new List<IPlayerActionControllerActions>();
     private readonly InputAction m_playerActionController_shoot;
-    private readonly InputAction m_playerActionController_relaod;
+    private readonly InputAction m_playerActionController_reload;
     public struct PlayerActionControllerActions
     {
         private @PlayerInputs m_Wrapper;
         public PlayerActionControllerActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @shoot => m_Wrapper.m_playerActionController_shoot;
-        public InputAction @relaod => m_Wrapper.m_playerActionController_relaod;
+        public InputAction @reload => m_Wrapper.m_playerActionController_reload;
         public InputActionMap Get() { return m_Wrapper.m_playerActionController; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -389,9 +389,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @shoot.started += instance.OnShoot;
             @shoot.performed += instance.OnShoot;
             @shoot.canceled += instance.OnShoot;
-            @relaod.started += instance.OnRelaod;
-            @relaod.performed += instance.OnRelaod;
-            @relaod.canceled += instance.OnRelaod;
+            @reload.started += instance.OnReload;
+            @reload.performed += instance.OnReload;
+            @reload.canceled += instance.OnReload;
         }
 
         private void UnregisterCallbacks(IPlayerActionControllerActions instance)
@@ -399,9 +399,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @shoot.started -= instance.OnShoot;
             @shoot.performed -= instance.OnShoot;
             @shoot.canceled -= instance.OnShoot;
-            @relaod.started -= instance.OnRelaod;
-            @relaod.performed -= instance.OnRelaod;
-            @relaod.canceled -= instance.OnRelaod;
+            @reload.started -= instance.OnReload;
+            @reload.performed -= instance.OnReload;
+            @reload.canceled -= instance.OnReload;
         }
 
         public void RemoveCallbacks(IPlayerActionControllerActions instance)
@@ -429,6 +429,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     public interface IPlayerActionControllerActions
     {
         void OnShoot(InputAction.CallbackContext context);
-        void OnRelaod(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

@@ -158,7 +158,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "relaod",
+                    "name": "reload",
                     "type": "Button",
                     "id": "0a796746-636c-493e-85b4-7bd6d6291c6e",
                     "expectedControlType": "Button",
@@ -197,7 +197,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "relaod",
+                    "action": "reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -10,11 +10,13 @@ public class enemyScript : MonoBehaviour
     public NavMeshAgent enemy;
     private Transform player;
     private float initialZombieHealth;
+    public Animator animator;
+
+   
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-
         initialZombieHealth = zombieStats.zombieHealth;
     }
     public void Update()
@@ -39,9 +41,12 @@ public class enemyScript : MonoBehaviour
 
         if (distanceToPlayer <= zombieStats.attackRange)
         {
-            //attack animation here and attack player logic
-
+            animator.SetBool("attack", true);
             Debug.Log("Player is within attack range.");
+        }
+        else
+        {
+            animator.SetBool("attack", false);
         }
     }
 

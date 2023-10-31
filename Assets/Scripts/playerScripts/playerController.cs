@@ -9,7 +9,7 @@ public class playerController : MonoBehaviour
     #region
 
     [SerializeField] private Camera mainCamera;
-    private Rigidbody rb;
+    //private Rigidbody rb;
     // Player Inputs
     private PlayerInputs playerInputs;
     Vector2 runAction;   // Stores the movement input from the player.
@@ -43,7 +43,7 @@ public class playerController : MonoBehaviour
     {
         playerCombat = GetComponent<playerCombat>();
         isGameStart = false;
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
         playerAnim = GetComponent<playerAnimation>();
     }
 
@@ -53,8 +53,6 @@ public class playerController : MonoBehaviour
         {
             handleAllInput();
         }
- 
-
     }
 
     #region Enable Input Manager 
@@ -83,7 +81,7 @@ public class playerController : MonoBehaviour
             playerInputs.playerActionController.shoot.canceled += i => shoot = false;
 
             //Call the reload function
-            playerInputs.playerActionController.relaod.canceled += i => reloadAction();
+            playerInputs.playerActionController.reload.canceled += i => reloadAction();
         }
         playerInputs.Enable(); // Enable the player input actions.
     }
@@ -142,13 +140,40 @@ public class playerController : MonoBehaviour
     }
     #endregion
 
+    #region Handle Reload
     public void reloadAction()
     {
-        shoot = false;
-        startShooting = false;
-        playerCombat.stopShootAction();
-        playerAnim.reloadAnimation();
+        // check how many bullets are needed to fill in the magazine.
+        int bulletsNeeded = playerCombat.M4AIstats.magazineSize - playerCombat.magazineSize; 
+
+        if (playerCombat.ammoBag > 0)
+        {
+            if (playerCombat.ammoBag >= bulletsNeeded)
+            {
+                // Deduct the required bullets from the ammo bag to fill the magazine.
+                playerCombat.ammoBag -= bulletsNeeded;
+
+                // Set the magazine size to its maximum capacity.
+                playerCombat.magazineSize = playerCombat.M4AIstats.magazineSize;
+            }
+            else
+            {
+                // If there are not enough bullets in the ammo bag to fill the magazine, 
+                // use all available bullets to partially reload the magazine.
+                playerCombat.magazineSize += playerCombat.ammoBag;
+                playerCombat.ammoBag = 0;
+            }
+
+            playerAnim.reloadAnimation();
+            //Debug.Log("Ammo Bag: " + playerCombat.ammoBag);
+            //Debug.Log("Magazine: " + playerCombat.magazineSize);
+        }
+        else
+        {
+            Debug.Log("Ammo bag is empty");
+        }
     }
+    #endregion
 
     #region Handel Run
     public void handleRun()
@@ -170,6 +195,7 @@ public class playerController : MonoBehaviour
     {
         if (walkAction && movements != Vector3.zero)
         {
+           //deduct the walkspeed to the current movespeed
             transform.position -= movements * SoldierStats.walkSpeed * Time.deltaTime;
    
             Debug.Log("some");
@@ -181,6 +207,7 @@ public class playerController : MonoBehaviour
         }
     }
     #endregion
+
     #region HandeSprint
     public void handleSprint()
     {
@@ -210,10 +237,9 @@ public class playerController : MonoBehaviour
             // Get the point on the ground where the ray hits.
             Vector3 playerPosition = hit.point;
 
-            // Set the player's position on the X and Z axis to match the mouse position.
             playerPosition.y = transform.position.y; // Maintain the player's current height.
 
-            // Smoothly rotate the player to aim at the target.
+            // Smooth rotation of the player to aim at the target.
             Quaternion targetRot = Quaternion.LookRotation(playerPosition - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 50f * Time.deltaTime);
         }

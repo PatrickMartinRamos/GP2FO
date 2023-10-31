@@ -65,7 +65,7 @@ Transform:
   m_Children:
   - {fileID: 3630892900355098757}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &4264170069151979961
 NavMeshAgent:
@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zombieStats: {fileID: 11400000, guid: 790cf463c483411478e7774f062b4d8f, type: 2}
   enemy: {fileID: 4264170069151979961}
+  animator: {fileID: 8335185396212930370}
 --- !u!136 &3120895672417537578
 CapsuleCollider:
   m_ObjectHideFlags: 0

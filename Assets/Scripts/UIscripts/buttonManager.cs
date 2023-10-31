@@ -14,6 +14,7 @@ public class buttonManager : MonoBehaviour
     private spawnManager spawnManager;
 
     public GameObject MainMenuUI;
+    public GameObject ingameUI;
 
     // Start is called before the first frame update
     private void Start()
@@ -26,6 +27,7 @@ public class buttonManager : MonoBehaviour
         topDownView.gameObject.SetActive(true);      
         thirdPersonView.gameObject.SetActive(false);
         MainMenuUI.gameObject.SetActive(false);
+        ingameUI.gameObject.SetActive(true);
     }
 
     public void activateGameContol()

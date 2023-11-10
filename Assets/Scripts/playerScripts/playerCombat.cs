@@ -16,6 +16,7 @@ public class playerCombat : MonoBehaviour
     private float nextFireTime;
     public int magazineSize;
     public int ammoBag;
+    private int initialAmmo;
 
     public void Start()
     {
@@ -23,6 +24,7 @@ public class playerCombat : MonoBehaviour
         playerAnimation = GetComponent<playerAnimation>();
         magazineSize = M4AIstats.magazineSize;
         ammoBag = M4AIstats.ammoBag;
+        initialAmmo = M4AIstats.ammoBag;
     }
 
     #region Handle StartShootingAction
@@ -48,5 +50,9 @@ public class playerCombat : MonoBehaviour
     public void stopShootAction()
     {
         playerAnimation.stopShootAnimation();
+    }
+    public void resetGun()
+    {
+        ammoBag = initialAmmo;
     }
 }

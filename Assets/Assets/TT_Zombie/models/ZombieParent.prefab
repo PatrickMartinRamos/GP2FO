@@ -104,6 +104,9 @@ MonoBehaviour:
   zombieStats: {fileID: 11400000, guid: 790cf463c483411478e7774f062b4d8f, type: 2}
   enemy: {fileID: 4264170069151979961}
   animator: {fileID: 8335185396212930370}
+  dropItems:
+  - {fileID: 1559175936835345295, guid: 6c63c055fc1d86b4798303a6f3509dae, type: 3}
+  - {fileID: 8922863893759819619, guid: b24fd75583436b649a36d45a3ade6c98, type: 3}
 --- !u!136 &3120895672417537578
 CapsuleCollider:
   m_ObjectHideFlags: 0

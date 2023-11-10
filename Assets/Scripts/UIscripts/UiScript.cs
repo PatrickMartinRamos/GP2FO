@@ -25,10 +25,11 @@ public class UiScript : MonoBehaviour
     {
         displayHealth();
         displayMagazine();
+
     }
     public void displayHealth()
     {
-        health = playerManager.playerStats.health;
+        health = playerManager.playerHealth;
         healthDisplay.text = "Health: " + health.ToString();
     }
 

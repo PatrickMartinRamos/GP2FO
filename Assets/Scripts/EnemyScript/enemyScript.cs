@@ -1,27 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DG.Tweening;
 
 public class enemyScript : MonoBehaviour
 {
     public enemyStats zombieStats;
 
     public NavMeshAgent enemy;
-    private Transform player;
+    private Transform playerTransform;
     private float initialZombieHealth;
     public Animator animator;
 
-   
+    gameManager gameManager;
+    playerManager playerManager;
+    private bool isAttaking = false;
+
+    private float lastAttackTime = 0f;
+
+    public GameObject[] dropItems;
+    
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        gameManager = FindAnyObjectByType<gameManager>();
+        playerManager = FindAnyObjectByType<playerManager>();
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         initialZombieHealth = zombieStats.zombieHealth;
     }
     public void Update()
     {
-        enemy.SetDestination(player.position);
+        enemy.SetDestination(playerTransform.position);
         zombieAttack();
     }
 
@@ -32,21 +40,30 @@ public class enemyScript : MonoBehaviour
         if (initialZombieHealth <= 0)
         {
             Destroy(gameObject);
+            if (dropItems.Length > 0 && Random.Range(0f, 1f) < gameManager.dropRate) 
+            {
+
+                int randomDrop = Random.Range(0, dropItems.Length);
+
+                Instantiate(dropItems[randomDrop], transform.position, Quaternion.identity);
+            }
         }
     }
 
     public void zombieAttack()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-        if (distanceToPlayer <= zombieStats.attackRange)
+        if (distanceToPlayer <= zombieStats.attackRange && Time.time - lastAttackTime >= zombieStats.attackSpeed)
         {
-            animator.SetBool("attack", true);
-            Debug.Log("Player is within attack range.");
+            Debug.Log("Attack triggered");
+            playerManager.playerHealth -= zombieStats.damage;
+            lastAttackTime = Time.time;
+            isAttaking = true;
         }
-        else
+        if (isAttaking)
         {
-            animator.SetBool("attack", false);
+            animator.SetTrigger("zomAttack");
         }
     }
 

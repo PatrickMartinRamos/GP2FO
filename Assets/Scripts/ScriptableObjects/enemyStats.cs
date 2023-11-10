@@ -9,4 +9,5 @@ public class enemyStats : ScriptableObject
     public float zombieHealth;
     public float damage;
     public float attackRange;
+    public float attackSpeed;
 }

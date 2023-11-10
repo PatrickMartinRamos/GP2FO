@@ -7,18 +7,18 @@ public class spawnManager : MonoBehaviour
     public GameObject enemy;
     public Transform[] spawnPoints;
 
-    public bool shouldSpawn = false;
     public float spawnInterval;
     private Coroutine spawnCoroutine;
-
+    gameManager gameManager;
     public void Start()
     {
+        gameManager = FindAnyObjectByType<gameManager>();
         spawnCoroutine = StartCoroutine(SpawnEnemies());
     }
 
     IEnumerator SpawnEnemies()
     {
-        while (shouldSpawn)
+        while (gameManager.shouldSpawn)
         {
             int randomSpawnPoint = Random.Range(0, spawnPoints.Length);
             Instantiate(enemy, spawnPoints[randomSpawnPoint].position, Quaternion.identity);
@@ -28,7 +28,7 @@ public class spawnManager : MonoBehaviour
     }
     public void startSpawningEnemy()
     {
-        shouldSpawn = true;
+        gameManager.shouldSpawn = true;
         spawnCoroutine = StartCoroutine(SpawnEnemies());
     }
 }

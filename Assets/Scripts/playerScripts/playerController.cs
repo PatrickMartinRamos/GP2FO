@@ -33,7 +33,8 @@ public class playerController : MonoBehaviour
     private float animationSmoothTime = 0.1f;
 
     public bool startShooting = false;
-    
+
+    gameManager gameManager;
     //event handler
     public bool isGameStart;
     #endregion 
@@ -41,6 +42,7 @@ public class playerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = FindAnyObjectByType<gameManager>();
         playerCombat = GetComponent<playerCombat>();
         isGameStart = false;
         //rb = GetComponent<Rigidbody>();
@@ -49,7 +51,7 @@ public class playerController : MonoBehaviour
 
     public void Update()
     {
-        if(isGameStart)
+        if(gameManager.isGameStart)
         {
             handleAllInput();
         }
@@ -144,34 +146,37 @@ public class playerController : MonoBehaviour
     public void reloadAction()
     {
         // check how many bullets are needed to fill in the magazine.
-        int bulletsNeeded = playerCombat.M4AIstats.magazineSize - playerCombat.magazineSize; 
-
-        if (playerCombat.ammoBag > 0)
+        int bulletsNeeded = playerCombat.M4AIstats.magazineSize - playerCombat.magazineSize;
+        if (gameManager.isGameStart)
         {
-            if (playerCombat.ammoBag >= bulletsNeeded)
+            if (playerCombat.ammoBag > 0)
             {
-                // Deduct the required bullets from the ammo bag to fill the magazine.
-                playerCombat.ammoBag -= bulletsNeeded;
+                if (playerCombat.ammoBag >= bulletsNeeded)
+                {
+                    // Deduct the required bullets from the ammo bag to fill the magazine.
+                    playerCombat.ammoBag -= bulletsNeeded;
 
-                // Set the magazine size to its maximum capacity.
-                playerCombat.magazineSize = playerCombat.M4AIstats.magazineSize;
+                    // Set the magazine size to its maximum capacity.
+                    playerCombat.magazineSize = playerCombat.M4AIstats.magazineSize;
+                }
+                else
+                {
+                    // If there are not enough bullets in the ammo bag to fill the magazine, 
+                    // use all available bullets to partially reload the magazine.
+                    playerCombat.magazineSize += playerCombat.ammoBag;
+                    playerCombat.ammoBag = 0;
+                }
+
+                playerAnim.reloadAnimation();
+                //Debug.Log("Ammo Bag: " + playerCombat.ammoBag);
+                //Debug.Log("Magazine: " + playerCombat.magazineSize);
             }
             else
             {
-                // If there are not enough bullets in the ammo bag to fill the magazine, 
-                // use all available bullets to partially reload the magazine.
-                playerCombat.magazineSize += playerCombat.ammoBag;
-                playerCombat.ammoBag = 0;
+                Debug.Log("Ammo bag is empty");
             }
+        }
 
-            playerAnim.reloadAnimation();
-            //Debug.Log("Ammo Bag: " + playerCombat.ammoBag);
-            //Debug.Log("Magazine: " + playerCombat.magazineSize);
-        }
-        else
-        {
-            Debug.Log("Ammo bag is empty");
-        }
     }
     #endregion
 

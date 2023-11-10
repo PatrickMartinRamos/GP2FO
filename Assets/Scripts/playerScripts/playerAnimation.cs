@@ -6,11 +6,14 @@ public class playerAnimation : MonoBehaviour
 {
     public Animator animator;
     public playerController playerController;
+    buttonManager buttonManager;
     int horizontalParameter;
     int verticalParameter;
+
      
     void Start()
     {
+        buttonManager = FindAnyObjectByType<buttonManager>();
         animator = GetComponentInChildren<Animator>();
         playerController = GetComponent<playerController>();
     }

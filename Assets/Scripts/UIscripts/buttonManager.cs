@@ -18,6 +18,7 @@ public class buttonManager : MonoBehaviour
     public GameObject MainMenuUI;
     public GameObject ingameUI;
     public GameObject deathScreenMenu;
+    scoreManager scoreManager;
 
     public GameObject pauseMenu;
     private bool isPaused;
@@ -26,12 +27,15 @@ public class buttonManager : MonoBehaviour
 
     public Image deathScreen;
 
+    public GameObject objectToDestroy;
+
     public enum GameState
     {
         MainMenu,
         InGame,
         Paused,
-        deathScene
+        deathScene,
+        victoryScene
     }
     public GameState currentGameState = GameState.MainMenu;
 
@@ -58,6 +62,7 @@ public class buttonManager : MonoBehaviour
         spawnManager = FindObjectOfType<spawnManager>();
         playerManager = FindObjectOfType<playerManager>();
         playerCombat = FindObjectOfType<playerCombat>();
+        scoreManager = FindAnyObjectByType<scoreManager>();
     }
     public void switchView()
     {      
@@ -67,7 +72,6 @@ public class buttonManager : MonoBehaviour
         ingameUI.gameObject.SetActive(true);
         currentGameState = GameState.InGame;
         Debug.Log(currentGameState);
-
 
     }
 
@@ -108,7 +112,7 @@ public class buttonManager : MonoBehaviour
     }
     public void returnToMenu()
     {
-        if(currentGameState == GameState.Paused || currentGameState == GameState.deathScene)
+        if(currentGameState == GameState.Paused || currentGameState == GameState.deathScene || currentGameState == GameState.victoryScene)
         {
             currentGameState = GameState.MainMenu;
             pauseMenu.SetActive(false);
@@ -126,9 +130,13 @@ public class buttonManager : MonoBehaviour
 
             playerManager.ResetPlayerStats();
             playerCombat.resetGun();
-            gameManager.resetTime();
-
+            scoreManager.resetScore();
+                
             player.SetActive(true);
+            gameManager.resetTime();
+            gameManager.resetGameObjects();
+            playerCombat.magazineSize = playerCombat.M4AIstats.magazineSize;
+            gameManager.resetPlayerPos();
 
             GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject obj in objectsWithTag)
@@ -154,5 +162,9 @@ public class buttonManager : MonoBehaviour
                 deathScreen.DOFade(0f, 0f);
             }   
         });
+    }
+    public void exit()
+    {
+        Application.Quit();
     }
 }

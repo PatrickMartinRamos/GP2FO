@@ -5,6 +5,7 @@ using UnityEngine;
 public class healthPack : MonoBehaviour
 {
     playerManager playermanager;
+    public dropItems healthDrop;
 
     private void Start()
     {
@@ -16,7 +17,7 @@ public class healthPack : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             Destroy(this.gameObject);
-            playermanager.playerHealth += 10;
+            playermanager.playerHealth += healthDrop.healthPack ;
         }
     }
 }

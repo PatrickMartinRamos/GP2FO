@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53455430b18e5ea499e582be56adf40a, type: 3}
   m_Name: normalZombie
   m_EditorClassIdentifier: 
-  zombieHealth: 20
-  damage: 1
+  zombieHealth: 15
+  damage: 2
   attackRange: 2
   attackSpeed: 1

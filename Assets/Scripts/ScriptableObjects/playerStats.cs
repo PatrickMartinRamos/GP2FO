@@ -11,5 +11,4 @@ public class playerStats : ScriptableObject
     public float sprintSpeed;
     public float runSpeed;
     public float attackDamage;
-    public int ammo;
 }

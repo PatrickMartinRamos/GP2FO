@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac1bcf30d96d6b141b8da2da4ae012e7, type: 3}
   m_Name: Soldier
   m_EditorClassIdentifier: 
-  health: 10
+  health: 20
   walkSpeed: 5
   sprintSpeed: 3
   runSpeed: 7
   attackDamage: 0
-  ammo: 150

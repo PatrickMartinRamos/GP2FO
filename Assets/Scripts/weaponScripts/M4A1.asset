@@ -17,6 +17,6 @@ MonoBehaviour:
   fireRate: 0.2
   bulletPrefab: {fileID: 2610910554176575445, guid: 4d9733010168c3e48b1d6b2d18660aa1,
     type: 3}
-  reloadTime: 0
+  reloadTime: 2
   magazineSize: 30
-  ammoBag: 240
+  ammoBag: 120

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09bb5717a2c1cc94fbf834b6f165919b, type: 3}
   m_Name: dropItems
   m_EditorClassIdentifier: 
+  dropRate: 100
   healthPack: 5
   ammoPack: 30

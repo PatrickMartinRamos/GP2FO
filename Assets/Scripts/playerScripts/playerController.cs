@@ -35,8 +35,8 @@ public class playerController : MonoBehaviour
     public bool startShooting = false;
 
     gameManager gameManager;
+    UiScript uiScript;
     //event handler
-    public bool isGameStart;
     #endregion 
 
     // Start is called before the first frame update
@@ -44,9 +44,11 @@ public class playerController : MonoBehaviour
     {
         gameManager = FindAnyObjectByType<gameManager>();
         playerCombat = GetComponent<playerCombat>();
-        isGameStart = false;
+        uiScript = FindAnyObjectByType<UiScript>();
         //rb = GetComponent<Rigidbody>();
         playerAnim = GetComponent<playerAnimation>();
+
+        gameManager.isGameStart = false;
     }
 
     public void Update()
@@ -151,33 +153,48 @@ public class playerController : MonoBehaviour
         {
             if (playerCombat.ammoBag > 0)
             {
-                if (playerCombat.ammoBag >= bulletsNeeded)
-                {
-                    // Deduct the required bullets from the ammo bag to fill the magazine.
-                    playerCombat.ammoBag -= bulletsNeeded;
+                uiScript.showReloadImage();
 
-                    // Set the magazine size to its maximum capacity.
-                    playerCombat.magazineSize = playerCombat.M4AIstats.magazineSize;
-                }
-                else
-                {
-                    // If there are not enough bullets in the ammo bag to fill the magazine, 
-                    // use all available bullets to partially reload the magazine.
-                    playerCombat.magazineSize += playerCombat.ammoBag;
-                    playerCombat.ammoBag = 0;
-                }
+                StartCoroutine(HideReloadImageAfterDelay(playerCombat.M4AIstats.reloadTime));
 
-                playerAnim.reloadAnimation();
-                //Debug.Log("Ammo Bag: " + playerCombat.ammoBag);
-                //Debug.Log("Magazine: " + playerCombat.magazineSize);
-            }
-            else
-            {
-                Debug.Log("Ammo bag is empty");
+                StartCoroutine(ReloadWithDelay(bulletsNeeded));
             }
         }
-
     }
+
+    private IEnumerator HideReloadImageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        uiScript.hideReloadImage();
+    }
+
+    private IEnumerator ReloadWithDelay(int bulletsNeeded)
+    {
+        yield return new WaitForSeconds(playerCombat.M4AIstats.reloadTime);
+
+        if (playerCombat.ammoBag >= bulletsNeeded)
+        {
+            // Deduct the required bullets from the ammo bag to fill the magazine.
+            playerCombat.ammoBag -= bulletsNeeded;
+
+            // Set the magazine size to its maximum capacity.
+            playerCombat.magazineSize = playerCombat.M4AIstats.magazineSize;
+        }
+        else
+        {
+            // If there are not enough bullets in the ammo bag to fill the magazine, 
+            // use all available bullets to partially reload the magazine.
+            playerCombat.magazineSize += playerCombat.ammoBag;
+            playerCombat.ammoBag = 0;
+        }
+
+        playerAnim.reloadAnimation();
+        // Debug.Log("Ammo Bag: " + playerCombat.ammoBag);
+        // Debug.Log("Magazine: " + playerCombat.magazineSize);
+    }
+
+
     #endregion
 
     #region Handel Run

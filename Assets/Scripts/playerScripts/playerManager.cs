@@ -1,7 +1,4 @@
 using DG.Tweening;
-using Microsoft.Unity.VisualStudio.Editor;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class playerManager : MonoBehaviour
@@ -12,11 +9,9 @@ public class playerManager : MonoBehaviour
     public buttonManager buttonManager;
 
 
-
     public void Start()
     {
         buttonManager = FindAnyObjectByType<buttonManager>();
-
         playerHealth = playerStats.health;
 
         initialPlayerHealth = playerStats.health;
@@ -37,11 +32,10 @@ public class playerManager : MonoBehaviour
         {
             GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject obj in objectsWithTag)
-            {
-                
+            {          
                 Destroy(obj);
             }
-            buttonManager.showDeathScreen();
+            buttonManager.showDeathScreen();    
             Debug.Log("die");
             transform.DORotate(lookAt, .5f);
         }

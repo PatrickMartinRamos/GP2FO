@@ -5,10 +5,12 @@ using UnityEngine;
 public class ammoPack : MonoBehaviour
 {
     playerCombat playerCombat;
+    public dropItems ammoDrop;
 
     private void Start()
     {
         playerCombat = FindAnyObjectByType<playerCombat>();
+
     }
 
     public void OnTriggerEnter(Collider other)
@@ -16,7 +18,7 @@ public class ammoPack : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             Destroy(this.gameObject);
-            playerCombat.ammoBag += 30;
+            playerCombat.ammoBag += ammoDrop.ammoPack;
         }
     }
 }

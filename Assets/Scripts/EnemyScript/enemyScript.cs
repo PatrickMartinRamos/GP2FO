@@ -13,6 +13,7 @@ public class enemyScript : MonoBehaviour
 
     gameManager gameManager;
     playerManager playerManager;
+    scoreManager scoreManager;
     private bool isAttaking = false;
 
     private float lastAttackTime = 0f;
@@ -22,6 +23,7 @@ public class enemyScript : MonoBehaviour
 
     private void Start()
     {
+        scoreManager = FindAnyObjectByType<scoreManager>();
         gameManager = FindAnyObjectByType<gameManager>();
         playerManager = FindAnyObjectByType<playerManager>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -40,7 +42,8 @@ public class enemyScript : MonoBehaviour
         if (initialZombieHealth <= 0)
         {
             Destroy(gameObject);
-            if (dropItems.Length > 0 && Random.Range(0f, 1f) < gameManager.dropRate) 
+            scoreManager.addScore(2);
+            if (dropItems.Length > 0 && Random.Range(0f, 1f) < gameManager.dropItems.dropRate) 
             {
 
                 int randomDrop = Random.Range(0, dropItems.Length);
